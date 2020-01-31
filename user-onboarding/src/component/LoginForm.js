@@ -3,24 +3,38 @@ import axios from "axios";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-function LoginForm() {
+function LoginForm({ values, errors, touched }) {
     return (
         <div>
             <h1>Onboarding New User!</h1>
             <Form >
-                <label>
+                <label htmlFor="name">
                     Name:
-                    <Field text="text" name="name" />
+                    <Field
+                        id="name"
+                        text="text" name="name" />
+                    {touched.name && errors.name && (<p>{errors.name}</p>)}
                 </label>
-                <label>
+                <label htmlFor="email">
                     Email:
-                    <Field text="text" name="email" />
+                    <Field
+                        id="email"
+                        text="text" name="email" />
                 </label>
-                <label>
+                <label htmlFor="password">
                     Password:
-                    <Field text="text" name="password" />
+                    <Field
+                        id="password"
+                        text="text" name="password" />
                 </label>
-                <button>Submit</button>
+                <label htmlFor="service">
+                    <Field id="service" type="checkbox" name="service" check={values.service}>
+
+                    </Field>
+                    <span className="checkark"></span>
+
+                </label>
+                <button type="submit">Submit</button>
             </Form>
         </div>
     );
@@ -28,12 +42,26 @@ function LoginForm() {
 }
 
 const FormikLoginForm = withFormik({
-    mapPropsToValues({ name, email, password, }) {
+    mapPropsToValues({ name, email, password, service }) {
         return {
+            name: name || "",
+            email: "",
+            password: "",
+            service: false
 
 
-        }
 
+        };
+
+    },
+
+    validationSchema: Yup.object().shape
+        ({
+            name: Yup.string().required()
+        }),
+
+    handleSubmit(values, formikBag) {
+        console.log("submitting", values)
     }
 
 
@@ -43,8 +71,6 @@ const FormikLoginForm = withFormik({
 
 
 
-
-
 })(LoginForm);
-
+// Replaced LoginForm with Formik LoginForm
 export default FormikLoginForm;
