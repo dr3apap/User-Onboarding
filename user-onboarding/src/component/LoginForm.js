@@ -9,14 +9,15 @@ import * as Yup from "yup";
 
 
 
-function LoginForm({ values, errors, touched, status }) {
+function LoginForm({ values, errors, touched, status, }) {
     const [users, setUsers] = useState([])
     useEffect(() => {
         console.log("status has changed", status);
         status && setUsers(users => [...users, status])
 
-        //setUsers("")
+
     }, [status]);
+
     return (
         <div>
             <h1>Onboarding New User!</h1>
@@ -26,7 +27,7 @@ function LoginForm({ values, errors, touched, status }) {
                     <Field
                         id="name"
                         text="text" name="name" placeholder="Enter FullName" />
-                    {touched.name && errors.name && (<p>{errors.name}</p>)},
+                    {touched.name && errors.name && (<p>{errors.name}</p>)}
 
                 </label>
                 <label htmlFor="email">
@@ -34,7 +35,7 @@ function LoginForm({ values, errors, touched, status }) {
                     <Field
                         id="email"
                         text="text" name="email" placeholder="Enter Email" />
-                    {touched.email && errors.email && (<p>{errors.email}</p>)},
+                    {touched.email && errors.email && (<p>{errors.email}</p>)}
 
                 </label>
                 <label htmlFor="password">
@@ -42,7 +43,7 @@ function LoginForm({ values, errors, touched, status }) {
                     <Field
                         id="password"
                         type="password" name="password" placeholder="Type in Password" />
-                    {touched.password && errors.password && (<p>{errors.password}</p>)},
+                    {touched.password && errors.password && (<p>{errors.password}</p>)}
 
                 </label>
                 <label htmlFor="service">
@@ -84,20 +85,21 @@ const FormikLoginForm = withFormik({
     validationSchema: Yup.object().shape
         ({
             name: Yup.string().required("Must enter Fullname"),
-            password: Yup.string().min(`password must be ${12} letter long`),
+            // password: Yup.string().min(`password must be ${12} letter long`),
             email: Yup.string().required("Email can't be empty")
 
 
 
         }),
 
-    handleSubmit(values, { setStatus }, formikBag) {
+    handleSubmit(values, { setStatus, resetForm }, formikBag) {
         console.log("submitting", values)
         axios.post("https://reqres.in/api/users/", values)
             .then(res => {
 
                 console.log("Success", res);
                 setStatus(res.data)
+                resetForm()
 
             })
             .catch(err => {
@@ -105,7 +107,6 @@ const FormikLoginForm = withFormik({
             });
 
     }
-
 
 
 })(LoginForm);
