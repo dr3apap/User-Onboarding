@@ -4,6 +4,11 @@ import axios from "axios";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
+
+
+
+
+
 function LoginForm({ values, errors, touched, status }) {
     const [users, setUsers] = useState([])
     useEffect(() => {
@@ -21,19 +26,24 @@ function LoginForm({ values, errors, touched, status }) {
                     <Field
                         id="name"
                         text="text" name="name" placeholder="Enter FullName" />
-                    {touched.name && errors.name && (<p>{errors.name}</p>)}
+                    {touched.name && errors.name && (<p>{errors.name}</p>)},
+
                 </label>
                 <label htmlFor="email">
                     Email:
                     <Field
                         id="email"
                         text="text" name="email" placeholder="Enter Email" />
+                    {touched.email && errors.email && (<p>{errors.email}</p>)},
+
                 </label>
                 <label htmlFor="password">
                     Password:
                     <Field
                         id="password"
                         type="password" name="password" placeholder="Type in Password" />
+                    {touched.password && errors.password && (<p>{errors.password}</p>)},
+
                 </label>
                 <label htmlFor="service">
                     <Field id="service" type="checkbox" name="service" check={values.service} />
@@ -73,7 +83,12 @@ const FormikLoginForm = withFormik({
 
     validationSchema: Yup.object().shape
         ({
-            name: Yup.string().required()
+            name: Yup.string().required("Must enter Fullname"),
+            password: Yup.string().min(`password must be ${12} letter long`),
+            email: Yup.string().required("Email can't be empty")
+
+
+
         }),
 
     handleSubmit(values, { setStatus }, formikBag) {
@@ -90,11 +105,6 @@ const FormikLoginForm = withFormik({
             });
 
     }
-
-
-
-
-
 
 
 
